@@ -41,11 +41,12 @@ public class ToAPointsPlugin extends Plugin {
 	public static int invocationLevel = 0;
 
 	boolean inRaid = false;
-	private String[] npcModList = {"Scarab Swarm","Agile Scarab","Scarab","Core","Het's Seal","Het's Seal(weakened)","Elidinis' Warden","Tumeken's Warden","Obelisk","Zebak","Ba-Ba","Baboon Brawler",
-			"Baboon Thrower","Baboon Mage","Baboon Shaman","Volatile Baboon","Cursed Baboon","Baboon Thrall",
-			"Arcane Scarab","Spitting Scarab","Soldier Scarab"};
+	int[] npcIds = {11707,11730,11778,11758,11770,11751,11756,11757,11761,11732,11783,11748,11749,11760,
+			11755,11753,11754,11762,
+			11709,11711,11710,11715,11718,11717,11716,
+			11723,11727,11726,11725,11724,11697};
 
-	int[] raidRegions = {14160,15186,15188,15698,15700,14162,14164,14674,14676,15184,15696};
+	int[] raidRegions = {14160,15186,15188,15698,15700,14162,14164,14674,14676,15184,15696,14672};
 	private int currentRegion = 0;
 
 	public static int getInvocationLevel()
@@ -88,11 +89,16 @@ public class ToAPointsPlugin extends Plugin {
 	{
 		Actor target = hitsplatApplied.getActor();
 		Hitsplat hitsplat = hitsplatApplied.getHitsplat();
-		// Ignore all hitsplats other than mine
-		if (!hitsplat.isMine() || target == client.getLocalPlayer())
+
+		//warden p2 is weird. The hitsplat doesn't count as either mine or others so we need a different way to grab it.
+		if(!hitsplat.isMine() && !hitsplat.isOthers() && (hitsplat.getHitsplatType() == 53 || hitsplat.getHitsplatType() == 55) ){
+			NPC npc = (NPC) target;
+		}
+		else if (!hitsplat.isMine() || target == client.getLocalPlayer())
 		{
 			return;
 		}
+
 
 		NPC npc = (NPC) target;
 
@@ -105,15 +111,19 @@ public class ToAPointsPlugin extends Plugin {
 	{
 		LocalPoint lp = client.getLocalPlayer().getLocalLocation();
 		int newRegion = lp == null ? -1 : WorldPoint.fromLocalInstance(client, lp).getRegionID();
+
+		//we are within ToA
 		if(ArrayUtils.contains(raidRegions,newRegion)){
 			inRaid = true;
 			overlayManager.add(overlay);
 
 			Widget invoWidget = client.getWidget(WidgetID.TOA_RAID_GROUP_ID, 42);
+
 			if(invoWidget != null) {
 				String invoLevel = invoWidget.getText();
 				invocationLevel = Integer.parseInt(invoLevel.replaceAll("[^0-9]", ""));
 			}
+
 		}
 		else{
 			inRaid = false;
@@ -168,62 +178,70 @@ public class ToAPointsPlugin extends Plugin {
 		int rawHit = hitsplat.getAmount();
 
 		String npcName = target.getName();
+		int npcId = target.getId();
 
-		String[] monkeyNames = {"Baboon Brawler","Baboon Thrower","Baboon Mage","Baboon Shaman","Volatile Baboon","Cursed Baboon","Baboon Thrall"};
-		String[] scarabNames = {"Scarab Swarm","Agile Scarab","Arcane Scarab","Spitting Scarab","Soldier Scarab","Scarab"};
-		if (ArrayUtils.contains(npcModList,npcName))
+
+		int[] scarabIds = {11723,11727,11726,11725,11724,11697};
+		int[] monkeyIds = {11712,11713,11709,11711,11710,11715,11718,11717,11716};
+
+
+		if (ArrayUtils.contains(npcIds,npcId))
 		{
 
 			//path of monk
-			if(ArrayUtils.contains(monkeyNames,npcName))
+			if(ArrayUtils.contains(monkeyIds,npcId))
 			{
 				modifier = 1.2;
 			}
-			if(npcName.equals("Ba-Ba"))
+			else if(npcId == 11778)
 			{
 				modifier = 2.0;
 			}
+			//boulders
+			else if(npcId == 11783){
+				modifier = 0.0;
+			}
 
-			//path of het
-			if(npcName.equals("Het's Seal") || npcName.equals("Het's Seal(weakened)"))
+			//path of het (11707)
+			else if(npcId == 11707)
 			{
 				modifier = 2.5;
 			}
 
 			//path of croc
-			if(npcName.equals("Zebak"))
+			else if(npcId == 11730 || npcId == 11732)
 			{
 				modifier = 1.5;
 			}
 
 			//path of dung
-			if(ArrayUtils.contains(scarabNames,npcName))
+			else if(ArrayUtils.contains(scarabIds,npcId))
 			{
 				modifier = 0.5;
 			}
 
-			//Warden: p1
-			if(npcName.equals("Obelisk"))
+			//Warden: p1 obelisk
+			else if(npcId == 11751)
 			{
 				modifier = 1.5;
 			}
 
-			if(npcName.equals("Core"))
+			//don't count hitsplats done to downed wardens
+			else if(npcId == 11758 || npcId == 11770 || npcId == 11748 || npcId == 11755 || npcId == 11749 || npcId == 11760)
 			{
+				//warden is down, count nothing.
 				modifier = 0;
-			}
-			//Warden: p2
-			if(npcName.equals("Tumeken's Warden") || npcName.equals("Elidinis' Warden"))
-			{
-				if(currentRegion == 15184)
-				{
-					modifier = 2.0;
-				}
-				if(currentRegion == 15696)
-				{
-					modifier = 2.5;
-				}
 
+			}
+
+			else if(npcId == 11756 || npcId == 11757 || npcId == 11753 || npcId == 11754){
+				//p2 warden non core
+				modifier = 2.0;
+			}
+
+			//p3 E warden
+			else if(npcId == 11761 || npcId == 11762){
+				modifier = 2.5;
 			}
 
 		}
