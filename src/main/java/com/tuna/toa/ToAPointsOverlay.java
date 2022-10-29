@@ -42,6 +42,9 @@ public class ToAPointsOverlay extends OverlayPanel
 
         double totalPoints = ToAPointsPlugin.getTotalPoints();
         double roomPoints = ToAPointsPlugin.getRoomPoints();
+        if (totalPoints >= 5000){
+            totalPoints = totalPoints - 5000;
+        }
 
         panelComponent.getChildren().add(LineComponent.builder()
                 .left("Total:")

@@ -17,6 +17,8 @@ import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.OverlayManager;
 import org.apache.commons.lang3.ArrayUtils;
 
+import java.util.List;
+
 @Slf4j
 @PluginDescriptor(
 		name = "ToA Points Overlay"
@@ -29,6 +31,9 @@ public class ToAPointsPlugin extends Plugin {
 	private ToAPointsOverlay overlay;
 
 	@Inject
+	private ToAPointsConfig config;
+
+	@Inject
 	private OverlayManager overlayManager;
 
 	@Inject
@@ -39,6 +44,8 @@ public class ToAPointsPlugin extends Plugin {
 	public static double roomPoints = 0;
 
 	public static int invocationLevel = 0;
+
+	public static int partySize = 0;
 
 	boolean inRaid = false;
 	int[] npcIds = {11707,11730,11778,11758,11770,11751,11756,11757,11761,11732,11783,11748,11749,11760,
@@ -90,19 +97,29 @@ public class ToAPointsPlugin extends Plugin {
 		Actor target = hitsplatApplied.getActor();
 		Hitsplat hitsplat = hitsplatApplied.getHitsplat();
 
-		//warden p2 is weird. The hitsplat doesn't count as either mine or others so we need a different way to grab it.
-		if(!hitsplat.isMine() && !hitsplat.isOthers() && (hitsplat.getHitsplatType() == 53 || hitsplat.getHitsplatType() == 55) ){
+		//p2 warden and palm are weird. So take the damage done to warden/palm divide it by group members then multiply by the modifier.
+		//Isn't super accurate, but it'll be as close as it can get currently.
+		if(!hitsplat.isMine() && !hitsplat.isOthers() &&
+				(hitsplat.getHitsplatType() == 53 || hitsplat.getHitsplatType() == 55 || hitsplat.getHitsplatType() == 11))
+		{
 			NPC npc = (NPC) target;
+			List<Player> teamMembers = client.getPlayers();
+
+			int averageHitSplat = hitsplat.getAmount() / teamMembers.size();
+
+			//p2 warden and palm are 2.0 modifier
+			averageHitSplat = averageHitSplat * 2;
+			roomPoints = roomPoints + averageHitSplat;
 		}
 		else if (!hitsplat.isMine() || target == client.getLocalPlayer())
 		{
-			return;
+			//do nothing
 		}
-
-
-		NPC npc = (NPC) target;
-
-		pointCalc(hitsplat, npc);
+		else
+		{
+			NPC npc = (NPC) target;
+			pointCalc(hitsplat, npc);
+		}
 
 	}
 
@@ -129,8 +146,13 @@ public class ToAPointsPlugin extends Plugin {
 			inRaid = false;
 			overlayManager.remove(overlay);
 		}
+		//still in the raid, but we moved to a new area
 		if(newRegion != currentRegion && inRaid)
 		{
+			//if we didnt just leave the nexus, or loot room add mvp points
+			if(currentRegion != 13454 && currentRegion != 14160 && currentRegion != 14672 && config.mvpAssumption()){
+				totalPoints = totalPoints + 300;
+			}
 			currentRegion = newRegion;
 
 			if(ArrayUtils.contains(raidRegions, currentRegion))
@@ -144,6 +166,7 @@ public class ToAPointsPlugin extends Plugin {
 				}
 			}
 		}
+		currentRegion = newRegion;
 	}
 
 	@Subscribe
@@ -184,6 +207,7 @@ public class ToAPointsPlugin extends Plugin {
 		int[] scarabIds = {11723,11727,11726,11725,11724,11697};
 		int[] monkeyIds = {11712,11713,11709,11711,11710,11715,11718,11717,11716};
 
+		log.debug(npcName);
 
 		if (ArrayUtils.contains(npcIds,npcId))
 		{
