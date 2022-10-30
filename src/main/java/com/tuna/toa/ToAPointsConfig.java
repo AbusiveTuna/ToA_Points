@@ -29,4 +29,16 @@ public interface ToAPointsConfig extends Config
 	{
 		return UniqueConfigOptions.ON;
 	}
+
+	@ConfigItem(
+			keyName = "puzzlePointsAssumption",
+			name = "Puzzle Points Assumption",
+			description = "Gives 300 points after Scarabs puzzles, and 450 after ba-ba's puzzle",
+			position = 3
+	)
+	default boolean puzzlePointsAssumption()
+	{
+		return true;
+	}
+
 }

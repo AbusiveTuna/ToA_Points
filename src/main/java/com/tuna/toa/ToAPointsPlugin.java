@@ -51,7 +51,7 @@ public class ToAPointsPlugin extends Plugin {
 	int[] npcIds = {11707,11730,11778,11758,11770,11751,11756,11757,11761,11732,11783,11748,11749,11760,
 			11755,11753,11754,11762,
 			11709,11711,11710,11715,11718,11717,11716,
-			11723,11727,11726,11725,11724,11697};
+			11727,11726,11725,11724,11697};
 
 	int[] raidRegions = {14160,15186,15188,15698,15700,14162,14164,14674,14676,15184,15696,14672};
 	private int currentRegion = 0;
@@ -149,6 +149,17 @@ public class ToAPointsPlugin extends Plugin {
 		//still in the raid, but we moved to a new area
 		if(newRegion != currentRegion && inRaid)
 		{
+
+			if(config.puzzlePointsAssumption()){
+				//assuming 100 points per puzzle, average 3 puzzles completed
+				if(newRegion == 14164){
+					totalPoints = totalPoints + 300;
+				}
+				//assuming 75 points per trap, average 6 traps completed
+				if(newRegion == 15188){
+					totalPoints = totalPoints + 450;
+				}
+			}
 			//if we didnt just leave the nexus, or loot room add mvp points
 			if(currentRegion != 13454 && currentRegion != 14160 && currentRegion != 14672 && config.mvpAssumption()){
 				totalPoints = totalPoints + 300;
@@ -204,7 +215,7 @@ public class ToAPointsPlugin extends Plugin {
 		int npcId = target.getId();
 
 
-		int[] scarabIds = {11723,11727,11726,11725,11724,11697};
+		int[] scarabIds = {11727,11726,11725,11724,11697};
 		int[] monkeyIds = {11712,11713,11709,11711,11710,11715,11718,11717,11716};
 
 		if (ArrayUtils.contains(npcIds,npcId))
