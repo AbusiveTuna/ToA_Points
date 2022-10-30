@@ -11,7 +11,7 @@ public interface ToAPointsConfig extends Config
 
 	@ConfigItem(
 			keyName = "mvpAssumption",
-			name = "MvP-Points-Assumption",
+			name = "MvP Points Assumption",
 			description = "currently we don't calculate MVP, so this adds 300 points (solo mvp) per completed room.",
 			position = 1
 	)
@@ -27,6 +27,6 @@ public interface ToAPointsConfig extends Config
 	)
 	default UniqueConfigOptions raidsUniqueChance()
 	{
-		return UniqueConfigOptions.BOTH;
+		return UniqueConfigOptions.ON;
 	}
 }

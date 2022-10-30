@@ -207,8 +207,6 @@ public class ToAPointsPlugin extends Plugin {
 		int[] scarabIds = {11723,11727,11726,11725,11724,11697};
 		int[] monkeyIds = {11712,11713,11709,11711,11710,11715,11718,11717,11716};
 
-		log.debug(npcName);
-
 		if (ArrayUtils.contains(npcIds,npcId))
 		{
 

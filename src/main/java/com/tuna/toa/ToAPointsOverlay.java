@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.text.DecimalFormat;
 import javax.inject.Inject;
+import javax.sound.sampled.Line;
 
 import com.tuna.toa.UniqueConfigOptions.UniqueConfigOptions;
 import net.runelite.api.Client;
@@ -13,6 +14,7 @@ import net.runelite.client.ui.overlay.components.LineComponent;
 
 
 import net.runelite.client.ui.overlay.OverlayPanel;
+import net.runelite.client.ui.overlay.components.TitleComponent;
 
 public class ToAPointsOverlay extends OverlayPanel
 {
@@ -46,6 +48,10 @@ public class ToAPointsOverlay extends OverlayPanel
             totalPoints = totalPoints - 5000;
         }
 
+        panelComponent.getChildren().add(TitleComponent.builder()
+                        .text("ToA Point Tracker").build());
+
+        panelComponent.getChildren().add(LineComponent.builder().build());
         panelComponent.getChildren().add(LineComponent.builder()
                 .left("Total:")
                 .right(POINTS_FORMAT.format(totalPoints))
@@ -93,7 +99,7 @@ public class ToAPointsOverlay extends OverlayPanel
                 }
 
                     int perOnePercentChance = 10500 - invocationMod;
-
+                    totalPoints = totalPoints + roomPoints;
                     uniqueChance = totalPoints/perOnePercentChance;
 
                     panelComponent.getChildren().add(LineComponent.builder()
