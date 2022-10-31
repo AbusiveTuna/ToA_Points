@@ -1,6 +1,6 @@
 package com.tuna.toa;
 
-public enum ToARegions
+public enum ToARegion
 {
 
   TOA_LOBBY(13454),
@@ -19,15 +19,15 @@ public enum ToARegions
 
   
     public final int regionID;
-    private static final Map<int, ToARegions> REGION_MAP = new HashMap<>();
+    private static final Map<int, ToARegion> REGION_MAP = new HashMap<>();
     
     static {
-        for (ToARegions e: values()) {
+        for (ToARegion e: values()) {
             REGION_MAP.put(e.regionID, e);
         }
     }
 
-    public static ToARegions fromRegionID(int regionID) {
+    public static ToARegion fromRegionID(int regionID) {
         return REGION_MAP.get(regionID);
     }
   
