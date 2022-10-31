@@ -41,11 +41,11 @@ SCARAB_SOLDIER(11724);
     
     static {
         for (ToANpc e: values()) {
-            REGION_MAP.put(e.ToANpc, e);
+            TOA_NPC_MAP.put(e.ToANpc, e);
         }
     }
 
-    public static ToANpc valueOfLabel(int regionID) {
+    public static ToANpc fromToANpcID(int regionID) {
         return TOA_NPC_MAP.get(ToANpc);
     }
   
