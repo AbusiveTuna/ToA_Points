@@ -3,6 +3,7 @@ package com.tuna.toa;
 public enum ToARegions
 {
 
+  TOA_LOBBY(13454),
   MAIN_AREA(14160),
   CHEST_ROOM(14672),
   PUZZLE_MONKEY(15186),
