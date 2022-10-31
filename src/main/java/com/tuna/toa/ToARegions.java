@@ -26,7 +26,7 @@ public enum ToARegions
         }
     }
 
-    public static ToARegions valueOfLabel(int regionID) {
+    public static ToARegions fromRegionID(int regionID) {
         return REGION_MAP.get(regionID);
     }
   
