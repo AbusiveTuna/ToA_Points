@@ -1,6 +1,5 @@
 package com.tuna.toa;
 
-import com.tuna.toa.UniqueConfigOptions.UniqueConfigOptions;
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;

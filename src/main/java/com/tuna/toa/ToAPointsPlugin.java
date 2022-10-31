@@ -15,7 +15,6 @@ import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.OverlayManager;
-import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.List;
 
@@ -24,7 +23,7 @@ import java.util.List;
 		name = "ToA Points Overlay"
 )
 public class ToAPointsPlugin extends Plugin {
-	
+
 	@Inject
 	private Client client;
 
@@ -49,7 +48,7 @@ public class ToAPointsPlugin extends Plugin {
 	public static int partySize = 0;
 
 	boolean inRaid = false;
-	
+
 	private ToARegion currentRegion = null;
 
 	public static int getInvocationLevel()
@@ -125,9 +124,8 @@ public class ToAPointsPlugin extends Plugin {
 		LocalPoint lp = client.getLocalPlayer().getLocalLocation();
 		int newRegionID = lp == null ? -1 : WorldPoint.fromLocalInstance(client, lp).getRegionID();
 		ToARegion newRegion = ToARegion.fromRegionID(newRegionID);
-		
 		//we are within ToA
-		if(newRegion != null)){
+		if(newRegion != null && newRegion != ToARegion.TOA_LOBBY){
 			inRaid = true;
 			overlayManager.add(overlay);
 
@@ -143,7 +141,7 @@ public class ToAPointsPlugin extends Plugin {
 			inRaid = false;
 			overlayManager.remove(overlay);
 		}
-		
+
 		//still in the raid, but we moved to a new area
 		if(newRegion != currentRegion && inRaid)
 		{
@@ -159,11 +157,11 @@ public class ToAPointsPlugin extends Plugin {
 						totalPoints = totalPoints + 300;
 						break;
 				}
-						
+
 			}
 			//if we didnt just leave the nexus, or loot room add mvp points
-			if(currentRegion != TOA_LOBBY && currentRegion != MAIN_AREA && currentRegion != CHEST_ROOM
-			   && currentRegion != BOSS_WARDEN_FINAL && config.mvpAssumption())
+			if(currentRegion != null && currentRegion != ToARegion.TOA_LOBBY && currentRegion != ToARegion.MAIN_AREA && currentRegion != ToARegion.CHEST_ROOM
+			   && config.mvpAssumption())
 			{
 				totalPoints = totalPoints + 300;
 			}
@@ -214,99 +212,81 @@ public class ToAPointsPlugin extends Plugin {
 		double modHit = 0;
 		double modifier = 0;
 		int rawHit = hitsplat.getAmount();
-		
-		ToANpc toaNpc = ToANpc.ToANpc(target.getId());
-		
-		switch(toaNpc)
-		{
-			case BABOON_BRAWLER:
-			case BABOON_THROWER:
-			case BABOON_MAGE:
-			case BABOON_SHAMAN:
-			case BABOON_THRALL:
-			case BABOON_CURSED:
-			case BABOON_VOLATILE: 
-			{
-				modifier = 1.2;
-				break;
-			}
-			
-			case BABA:
-			{
-				modifier = 2.0;
-				break;
-			}
 
-			case BOULDER:
-			{
-				modifier = 0.0;
-				break;
-			}
+		ToANpc currentTarget = ToANpc.fromNpcID(target.getId());
 
-			case HET_OBELISK:
-			{
-				modifier = 2.5;
-				break;
-			}
-
-			case ZEBAK:
-			case ZEBAK_ENRAGED:
-			{
-				modifier = 1.5;
-				break;
-			}
-
-			case SCARAB_ARCANE:
-			case SCARAB_SPITTING:
-			case SCARAB_SOLDIER:
-			{
-				modifier = 0.5;
-				break;
-			}
-
-			case WARDEN_OBELISK:
-			{
-				modifier = 1.5;
-				break;
-			}
-			
-			case WARDEN_ELIDINIS_INACTIVE_P1:
-			case WARDEN_ELIDINIS_INACTIVE_P2:
-			case WARDEN_ELIDINIS_INACTIVE_P3:
-			case WARDEN_TUMEKEN_INACTIVE_P1:
-			case WARDEN_TUMEKEN_INACTIVE_P2:
-			case WARDEN_TUMEKEN_INACTIVE_P3:
-			case WARDEN_CORE:
-			{
-				modifier = 0;
-				break;
-			}
-
-			case WARDEN_TUMEKEN_RANGE:
-			case WARDEN_TUMEKEN_MAGE: 
-			case WARDEN_ELIDINIS_MAGE:
-			case WARDEN_ELIDINIS_RANGE:
-			{
-				modifier = 2.0;
-				break;
-			}
-
-			case WARDEN_TUMEKEN_FINAL:
-			case WARDEN_ELIDINIS_FINAL:
-			{
-				modifier = 2.5;
-				break;
-			}
-			
-			default:
-			{
-				modifier = 1.0;
-				break;
-			}
-				
-
+		if(currentTarget == null){
+			modifier = 1;
 		}
+		else {
 
+			switch (currentTarget) {
+				case BABOON_BRAWLER:
+				case BABOON_THROWER:
+				case BABOON_MAGE:
+				case BABOON_SHAMAN:
+				case BABOON_THRALL:
+				case BABOON_CURSED:
+				case BABOON_VOLATILE: {
+					modifier = 1.2;
+					break;
+				}
+
+				case BABA:
+
+				case WARDEN_TUMEKEN_RANGE:
+				case WARDEN_TUMEKEN_MAGE:
+				case WARDEN_ELIDINIS_MAGE:
+				case WARDEN_ELIDINIS_RANGE: {
+					modifier = 2.0;
+					break;
+				}
+
+				case BOULDER: {
+					modifier = 0.0;
+					break;
+				}
+
+				case HET_OBELISK:
+				case WARDEN_TUMEKEN_FINAL:
+				case WARDEN_ELIDINIS_FINAL: {
+					modifier = 2.5;
+					break;
+				}
+
+				case ZEBAK:
+				case ZEBAK_ENRAGED:
+				case WARDEN_OBELISK: {
+					modifier = 1.5;
+					break;
+				}
+
+				case SCARAB_ARCANE:
+				case SCARAB_SPITTING:
+				case SCARAB_SOLDIER: {
+					modifier = 0.5;
+					break;
+				}
+
+				case WARDEN_ELIDINIS_INACTIVE_P1:
+				case WARDEN_ELIDINIS_INACTIVE_P2:
+				case WARDEN_ELIDINIS_INACTIVE_P3:
+				case WARDEN_TUMEKEN_INACTIVE_P1:
+				case WARDEN_TUMEKEN_INACTIVE_P2:
+				case WARDEN_TUMEKEN_INACTIVE_P3:
+				case WARDEN_CORE: {
+					modifier = 0;
+					break;
+				}
+
+				default: {
+					modifier = 1.0;
+					break;
+				}
+
+
+			}
+		}
 
 		modHit = rawHit * modifier;
 
@@ -335,6 +315,7 @@ public class ToAPointsPlugin extends Plugin {
 	public void reset()
 	{
 		roomPoints = 0;
+		currentRegion = null;
 		totalPoints = 5000;
 		inRaid = false;
 	}

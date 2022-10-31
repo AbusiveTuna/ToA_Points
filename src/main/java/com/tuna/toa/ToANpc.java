@@ -1,5 +1,10 @@
 package com.tuna.toa;
 
+import lombok.RequiredArgsConstructor;
+import java.util.HashMap;
+import java.util.Map;
+
+@RequiredArgsConstructor
 public enum ToANpc
 {
 
@@ -34,19 +39,17 @@ SCARAB_ARCANE(11726),
 SCARAB_SPITTING(11725),
 SCARAB_SOLDIER(11724);
 
+    public final int npcID;
+    private static final Map<Integer, ToANpc> NPC_MAP = new HashMap<>();
 
-  
-    public final int ToANpc;
-    private static final Map<int, ToANpc> TOA_NPC_MAP = new HashMap<>();
-    
     static {
         for (ToANpc e: values()) {
-            TOA_NPC_MAP.put(e.ToANpc, e);
+            NPC_MAP.put(e.npcID, e);
         }
     }
 
-    public static ToANpc fromToANpcID(int regionID) {
-        return TOA_NPC_MAP.get(ToANpc);
+    public static ToANpc fromNpcID(int npcID) {
+        return NPC_MAP.get(npcID);
     }
-  
+
 }

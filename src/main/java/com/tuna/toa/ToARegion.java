@@ -1,5 +1,11 @@
 package com.tuna.toa;
 
+import lombok.RequiredArgsConstructor;
+
+import java.util.HashMap;
+import java.util.Map;
+
+@RequiredArgsConstructor
 public enum ToARegion
 {
 
@@ -17,9 +23,9 @@ public enum ToARegion
   BOSS_WARDEN(15184),
   BOSS_WARDEN_FINAL(15696);
 
-  
+
     public final int regionID;
-    private static final Map<int, ToARegion> REGION_MAP = new HashMap<>();
+    private static final Map<Integer, ToARegion> REGION_MAP = new HashMap<>();
     
     static {
         for (ToARegion e: values()) {
