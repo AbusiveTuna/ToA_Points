@@ -62,7 +62,7 @@ public class ToAPointsOverlay extends OverlayPanel
                 .right(POINTS_FORMAT.format(roomPoints))
                 .build());
 
-        if (config.raidsUniqueChance() != UniqueConfigOptions.OFF)
+        if (config.raidsUniqueChance())
         {
             if (totalPoints < 1500)
             {
