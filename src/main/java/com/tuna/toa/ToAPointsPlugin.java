@@ -23,7 +23,7 @@ import java.util.List;
 		name = "ToA Points Overlay"
 )
 public class ToAPointsPlugin extends Plugin {
-	
+
 	@Inject
 	private Client client;
 
@@ -48,7 +48,7 @@ public class ToAPointsPlugin extends Plugin {
 	public static int partySize = 0;
 
 	boolean inRaid = false;
-	
+
 	private ToARegion currentRegion = null;
 
 	public static int getInvocationLevel()
@@ -141,7 +141,7 @@ public class ToAPointsPlugin extends Plugin {
 			inRaid = false;
 			overlayManager.remove(overlay);
 		}
-		
+
 		//still in the raid, but we moved to a new area
 		if(newRegion != currentRegion && inRaid)
 		{
@@ -157,7 +157,7 @@ public class ToAPointsPlugin extends Plugin {
 						totalPoints = totalPoints + 300;
 						break;
 				}
-						
+
 			}
 			//if we didnt just leave the nexus, or loot room add mvp points
 			if(currentRegion != null && currentRegion != ToARegion.TOA_LOBBY && currentRegion != ToARegion.MAIN_AREA && currentRegion != ToARegion.CHEST_ROOM
@@ -212,7 +212,7 @@ public class ToAPointsPlugin extends Plugin {
 		double modHit = 0;
 		double modifier = 0;
 		int rawHit = hitsplat.getAmount();
-		
+
 		ToANpc currentTarget = ToANpc.fromNpcID(target.getId());
 
 		if(currentTarget == null){
