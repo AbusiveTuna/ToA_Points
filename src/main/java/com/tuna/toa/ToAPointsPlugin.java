@@ -219,7 +219,6 @@ public class ToAPointsPlugin extends Plugin {
 		
 		switch(toaNpc)
 		{
-
 			case BABOON_BRAWLER:
 			case BABOON_THROWER:
 			case BABOON_MAGE:
@@ -229,28 +228,32 @@ public class ToAPointsPlugin extends Plugin {
 			case BABOON_VOLATILE: 
 			{
 				modifier = 1.2;
+				break;
 			}
 			
 			case BABA:
 			{
 				modifier = 2.0;
+				break;
 			}
 
 			case BOULDER:
 			{
-				
 				modifier = 0.0;
+				break;
 			}
 
 			case HET_OBELISK:
 			{
 				modifier = 2.5;
+				break;
 			}
 
 			case ZEBAK:
 			case ZEBAK_ENRAGED:
 			{
 				modifier = 1.5;
+				break;
 			}
 
 			case SCARAB_ARCANE:
@@ -258,11 +261,13 @@ public class ToAPointsPlugin extends Plugin {
 			case SCARAB_SOLDIER:
 			{
 				modifier = 0.5;
+				break;
 			}
 
 			case WARDEN_OBELISK:
 			{
 				modifier = 1.5;
+				break;
 			}
 			
 			case WARDEN_ELIDINIS_INACTIVE_P1:
@@ -274,6 +279,7 @@ public class ToAPointsPlugin extends Plugin {
 			case WARDEN_CORE:
 			{
 				modifier = 0;
+				break;
 			}
 
 			case WARDEN_TUMEKEN_RANGE:
@@ -281,21 +287,26 @@ public class ToAPointsPlugin extends Plugin {
 			case WARDEN_ELIDINIS_MAGE:
 			case WARDEN_ELIDINIS_RANGE:
 			{
-				
 				modifier = 2.0;
+				break;
 			}
 
 			case WARDEN_TUMEKEN_FINAL:
 			case WARDEN_ELIDINIS_FINAL:
 			{
 				modifier = 2.5;
+				break;
 			}
+			
+			default:
+			{
+				modifier = 1.0;
+				break;
+			}
+				
 
 		}
-		else
-		{
-			modifier = 1;
-		}
+
 
 		modHit = rawHit * modifier;
 
