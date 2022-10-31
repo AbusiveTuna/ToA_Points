@@ -48,7 +48,7 @@ public class ToAPointsPlugin extends Plugin {
 	public static int partySize = 0;
 
 	boolean inRaid = false;
-	int[] npcIds = {11707,11730,11778,11758,11770,11751,11756,11757,11761,11732,11783,11748,11749,11760,
+	int[] npcIds = {11707,11730,11778,11758,11770,11751,11756,11757,11761,11732,11783,11748,11749,11760,11759,
 			11755,11753,11754,11762,
 			11709,11711,11710,11715,11718,11717,11716,
 			11727,11726,11725,11724,11697};
@@ -260,7 +260,7 @@ public class ToAPointsPlugin extends Plugin {
 			}
 
 			//don't count hitsplats done to downed wardens
-			else if(npcId == 11758 || npcId == 11770 || npcId == 11748 || npcId == 11755 || npcId == 11749 || npcId == 11760)
+			else if(npcId == 11758 || npcId == 11770 || npcId == 11748 || npcId == 11755 || npcId == 11749 || npcId == 11760 || npcId == 11759)
 			{
 				//warden is down, count nothing.
 				modifier = 0;
