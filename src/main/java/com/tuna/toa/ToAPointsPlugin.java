@@ -15,7 +15,6 @@ import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.OverlayManager;
-import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.List;
 
@@ -24,6 +23,7 @@ import java.util.List;
 		name = "ToA Points Overlay"
 )
 public class ToAPointsPlugin extends Plugin {
+
 	@Inject
 	private Client client;
 
@@ -48,13 +48,8 @@ public class ToAPointsPlugin extends Plugin {
 	public static int partySize = 0;
 
 	boolean inRaid = false;
-	int[] npcIds = {11707,11730,11778,11758,11770,11751,11756,11757,11761,11732,11783,11748,11749,11760,11759,
-			11755,11753,11754,11762,
-			11709,11711,11710,11715,11718,11717,11716,
-			11727,11726,11725,11724,11697};
 
-	int[] raidRegions = {14160,15186,15188,15698,15700,14162,14164,14674,14676,15184,15696,14672};
-	private int currentRegion = 0;
+	private ToARegion currentRegion = null;
 
 	public static int getInvocationLevel()
 	{
@@ -100,7 +95,7 @@ public class ToAPointsPlugin extends Plugin {
 		//p2 warden and palm are weird. So take the damage done to warden/palm divide it by group members then multiply by the modifier.
 		//Isn't super accurate, but it'll be as close as it can get currently.
 		if(!hitsplat.isMine() && !hitsplat.isOthers() &&
-				(hitsplat.getHitsplatType() == 53 || hitsplat.getHitsplatType() == 55 || hitsplat.getHitsplatType() == 11))
+		(hitsplat.getHitsplatType() == 53 || hitsplat.getHitsplatType() == 55 || hitsplat.getHitsplatType() == 11))
 		{
 			NPC npc = (NPC) target;
 			List<Player> teamMembers = client.getPlayers();
@@ -127,10 +122,10 @@ public class ToAPointsPlugin extends Plugin {
 	public void onVarbitChanged(VarbitChanged event)
 	{
 		LocalPoint lp = client.getLocalPlayer().getLocalLocation();
-		int newRegion = lp == null ? -1 : WorldPoint.fromLocalInstance(client, lp).getRegionID();
-
+		int newRegionID = lp == null ? -1 : WorldPoint.fromLocalInstance(client, lp).getRegionID();
+		ToARegion newRegion = ToARegion.fromRegionID(newRegionID);
 		//we are within ToA
-		if(ArrayUtils.contains(raidRegions,newRegion)){
+		if(newRegion != null && newRegion != ToARegion.TOA_LOBBY){
 			inRaid = true;
 			overlayManager.add(overlay);
 
@@ -146,27 +141,34 @@ public class ToAPointsPlugin extends Plugin {
 			inRaid = false;
 			overlayManager.remove(overlay);
 		}
+
 		//still in the raid, but we moved to a new area
 		if(newRegion != currentRegion && inRaid)
 		{
 
 			if(config.puzzlePointsAssumption()){
-				//assuming 100 points per puzzle, average 3 puzzles completed
-				if(newRegion == 14164){
-					totalPoints = totalPoints + 300;
+
+				switch(newRegion)
+				{
+					case BOSS_BABA:
+						totalPoints = totalPoints + 450;
+						break;
+					case BOSS_KEPHRI:
+						totalPoints = totalPoints + 300;
+						break;
 				}
-				//assuming 75 points per trap, average 6 traps completed
-				if(newRegion == 15188){
-					totalPoints = totalPoints + 450;
-				}
+
 			}
 			//if we didnt just leave the nexus, or loot room add mvp points
-			if(currentRegion != 13454 && currentRegion != 14160 && currentRegion != 14672 && config.mvpAssumption()){
+			if(currentRegion != null && currentRegion != ToARegion.TOA_LOBBY && currentRegion != ToARegion.MAIN_AREA && currentRegion != ToARegion.CHEST_ROOM
+			   && config.mvpAssumption())
+			{
 				totalPoints = totalPoints + 300;
 			}
+
 			currentRegion = newRegion;
 
-			if(ArrayUtils.contains(raidRegions, currentRegion))
+			if(currentRegion != null)
 			{
 				totalPoints = totalPoints + roomPoints;
 				roomPoints = 0;
@@ -211,76 +213,79 @@ public class ToAPointsPlugin extends Plugin {
 		double modifier = 0;
 		int rawHit = hitsplat.getAmount();
 
-		String npcName = target.getName();
-		int npcId = target.getId();
+		ToANpc currentTarget = ToANpc.fromNpcID(target.getId());
 
-
-		int[] scarabIds = {11727,11726,11725,11724,11697};
-		int[] monkeyIds = {11712,11713,11709,11711,11710,11715,11718,11717,11716};
-
-		if (ArrayUtils.contains(npcIds,npcId))
-		{
-
-			//path of monk
-			if(ArrayUtils.contains(monkeyIds,npcId))
-			{
-				modifier = 1.2;
-			}
-			else if(npcId == 11778)
-			{
-				modifier = 2.0;
-			}
-			//boulders
-			else if(npcId == 11783){
-				modifier = 0.0;
-			}
-
-			//path of het (11707)
-			else if(npcId == 11707)
-			{
-				modifier = 2.5;
-			}
-
-			//path of croc
-			else if(npcId == 11730 || npcId == 11732)
-			{
-				modifier = 1.5;
-			}
-
-			//path of dung
-			else if(ArrayUtils.contains(scarabIds,npcId))
-			{
-				modifier = 0.5;
-			}
-
-			//Warden: p1 obelisk
-			else if(npcId == 11751)
-			{
-				modifier = 1.5;
-			}
-
-			//don't count hitsplats done to downed wardens
-			else if(npcId == 11758 || npcId == 11770 || npcId == 11748 || npcId == 11755 || npcId == 11749 || npcId == 11760 || npcId == 11759)
-			{
-				//warden is down, count nothing.
-				modifier = 0;
-
-			}
-
-			else if(npcId == 11756 || npcId == 11757 || npcId == 11753 || npcId == 11754){
-				//p2 warden non core
-				modifier = 2.0;
-			}
-
-			//p3 E warden
-			else if(npcId == 11761 || npcId == 11762){
-				modifier = 2.5;
-			}
-
-		}
-		else
-		{
+		if(currentTarget == null){
 			modifier = 1;
+		}
+		else {
+
+			switch (currentTarget) {
+				case BABOON_BRAWLER:
+				case BABOON_THROWER:
+				case BABOON_MAGE:
+				case BABOON_SHAMAN:
+				case BABOON_THRALL:
+				case BABOON_CURSED:
+				case BABOON_VOLATILE: {
+					modifier = 1.2;
+					break;
+				}
+
+				case BABA:
+
+				case WARDEN_TUMEKEN_RANGE:
+				case WARDEN_TUMEKEN_MAGE:
+				case WARDEN_ELIDINIS_MAGE:
+				case WARDEN_ELIDINIS_RANGE: {
+					modifier = 2.0;
+					break;
+				}
+
+				case BOULDER: {
+					modifier = 0.0;
+					break;
+				}
+
+				case HET_OBELISK:
+				case WARDEN_TUMEKEN_FINAL:
+				case WARDEN_ELIDINIS_FINAL: {
+					modifier = 2.5;
+					break;
+				}
+
+				case ZEBAK:
+				case ZEBAK_ENRAGED:
+				case WARDEN_OBELISK: {
+					modifier = 1.5;
+					break;
+				}
+
+				case SCARAB_ARCANE:
+				case SCARAB_SPITTING:
+				case SCARAB_SOLDIER: {
+					modifier = 0.5;
+					break;
+				}
+
+				case WARDEN_ELIDINIS_INACTIVE_P1:
+				case WARDEN_ELIDINIS_INACTIVE_P2:
+				case WARDEN_ELIDINIS_INACTIVE_P3:
+				case WARDEN_TUMEKEN_INACTIVE_P1:
+				case WARDEN_TUMEKEN_INACTIVE_P2:
+				case WARDEN_TUMEKEN_INACTIVE_P3:
+				case WARDEN_CORE: {
+					modifier = 0;
+					break;
+				}
+
+				default: {
+					modifier = 1.0;
+					break;
+				}
+
+
+			}
 		}
 
 		modHit = rawHit * modifier;
@@ -301,8 +306,7 @@ public class ToAPointsPlugin extends Plugin {
 	{
 
 		if (event.getGameState() == GameState.LOGGED_IN
-				&& client.getLocalPlayer() != null
-				&& !inRaid)
+		    && client.getLocalPlayer() != null && !inRaid)
 		{
 			reset();
 		}
@@ -311,6 +315,7 @@ public class ToAPointsPlugin extends Plugin {
 	public void reset()
 	{
 		roomPoints = 0;
+		currentRegion = null;
 		totalPoints = 5000;
 		inRaid = false;
 	}

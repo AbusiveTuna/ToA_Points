@@ -1,6 +1,5 @@
 package com.tuna.toa;
 
-import com.tuna.toa.UniqueConfigOptions.UniqueConfigOptions;
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
@@ -25,9 +24,9 @@ public interface ToAPointsConfig extends Config
 			description = "Displays the chance that a single unique could be in raid loot",
 			position = 2
 	)
-	default UniqueConfigOptions raidsUniqueChance()
+	default boolean raidsUniqueChance()
 	{
-		return UniqueConfigOptions.ON;
+		return true;
 	}
 
 	@ConfigItem(

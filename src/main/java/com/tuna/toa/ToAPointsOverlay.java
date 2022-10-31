@@ -4,9 +4,7 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.text.DecimalFormat;
 import javax.inject.Inject;
-import javax.sound.sampled.Line;
 
-import com.tuna.toa.UniqueConfigOptions.UniqueConfigOptions;
 import net.runelite.api.Client;
 import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.ui.overlay.OverlayPriority;
@@ -62,7 +60,7 @@ public class ToAPointsOverlay extends OverlayPanel
                 .right(POINTS_FORMAT.format(roomPoints))
                 .build());
 
-        if (config.raidsUniqueChance() != UniqueConfigOptions.OFF)
+        if (config.raidsUniqueChance())
         {
             if (totalPoints < 1500)
             {
