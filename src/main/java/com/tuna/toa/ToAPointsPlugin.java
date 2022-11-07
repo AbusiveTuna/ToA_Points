@@ -95,7 +95,7 @@ public class ToAPointsPlugin extends Plugin {
 
 		//p2 warden and palm are weird. So take the damage done to warden/palm divide it by group members then multiply by the modifier.
 		//Isn't super accurate, but it'll be as close as it can get currently.
-		if(!hitsplat.isMine() && !hitsplat.isOthers() &&
+		if(!hitsplat.isMine() && !hitsplat.isOthers() && !target.getName().equals("Kephri") &&
 		(hitsplat.getHitsplatType() == 53 || hitsplat.getHitsplatType() == 55 || hitsplat.getHitsplatType() == 11))
 		{
 			NPC npc = (NPC) target;
