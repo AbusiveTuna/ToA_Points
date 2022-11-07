@@ -7,6 +7,7 @@ import net.runelite.api.*;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.*;
+import net.runelite.api.events.GameTick;
 import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetID;
 import net.runelite.client.callback.ClientThread;
@@ -94,7 +95,7 @@ public class ToAPointsPlugin extends Plugin {
 
 		//p2 warden and palm are weird. So take the damage done to warden/palm divide it by group members then multiply by the modifier.
 		//Isn't super accurate, but it'll be as close as it can get currently.
-		if(!hitsplat.isMine() && !hitsplat.isOthers() &&
+		if(!hitsplat.isMine() && !hitsplat.isOthers() && !target.getName().equals("Kephri") &&
 		(hitsplat.getHitsplatType() == 53 || hitsplat.getHitsplatType() == 55 || hitsplat.getHitsplatType() == 11))
 		{
 			NPC npc = (NPC) target;
@@ -119,7 +120,7 @@ public class ToAPointsPlugin extends Plugin {
 	}
 
 	@Subscribe
-	public void onVarbitChanged(VarbitChanged event)
+	public void onGameTick(GameTick e)
 	{
 		LocalPoint lp = client.getLocalPlayer().getLocalLocation();
 		int newRegionID = lp == null ? -1 : WorldPoint.fromLocalInstance(client, lp).getRegionID();

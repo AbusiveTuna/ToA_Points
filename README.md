@@ -11,17 +11,8 @@ This is due to them having different hitsplats that the player doesn't own.
 Basically you'll always get an equal amount of points on these two
 as the rest of your team. 
 
-Doesn't give points for Scabaras puzzles (100 each)
-
-Doesn't give points for Monkey room vents/pillars (70? each)
-
-These both add for around ~500 per raid, which will be hard to notice but
-still found it worth mentioning here.
-
 **Future Updates:**
 
 Add better MVP tracker
 
 Add Party plugin
-
-Add Scabaras/Monkey points
