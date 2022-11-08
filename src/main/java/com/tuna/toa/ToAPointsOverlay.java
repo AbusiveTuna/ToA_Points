@@ -49,16 +49,18 @@ public class ToAPointsOverlay extends OverlayPanel
         panelComponent.getChildren().add(TitleComponent.builder()
                         .text("ToA Point Tracker").build());
 
-        panelComponent.getChildren().add(LineComponent.builder().build());
         panelComponent.getChildren().add(LineComponent.builder()
                 .left("Total:")
                 .right(POINTS_FORMAT.format(totalPoints))
                 .build());
+                
+        if(config.roomPoints()){
+                panelComponent.getChildren().add(LineComponent.builder()
+                    .left("Room Points:")
+                    .right(POINTS_FORMAT.format(roomPoints))
+                    .build());
+        }
 
-        panelComponent.getChildren().add(LineComponent.builder()
-                .left("Room Points:")
-                .right(POINTS_FORMAT.format(roomPoints))
-                .build());
 
         if (config.raidsUniqueChance())
         {
