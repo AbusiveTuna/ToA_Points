@@ -275,7 +275,8 @@ public class ToAPointsPlugin extends Plugin {
 				case WARDEN_TUMEKEN_INACTIVE_P1:
 				case WARDEN_TUMEKEN_INACTIVE_P2:
 				case WARDEN_TUMEKEN_INACTIVE_P3:
-				case WARDEN_CORE: {
+				case WARDEN_CORE_TUMEKEN:
+				case WARDEN_CORE_ELIDINIS: {
 					modifier = 0;
 					break;
 				}
