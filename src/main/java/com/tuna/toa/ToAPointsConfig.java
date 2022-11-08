@@ -39,5 +39,16 @@ public interface ToAPointsConfig extends Config
 	{
 		return true;
 	}
+	
+		@ConfigItem(
+			keyName = "roomPoints",
+			name = "Display current room points",
+			description = "For the fixed andys",
+			position = 4
+	)
+	default boolean roomPoints()
+	{
+		return true;
+	}
 
 }
