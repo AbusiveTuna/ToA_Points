@@ -19,6 +19,8 @@ import net.runelite.client.ui.overlay.OverlayManager;
 
 import java.util.List;
 
+import static com.tuna.toa.ToARegion.*;
+
 @Slf4j
 @PluginDescriptor(
 		name = "ToA Points Overlay"
@@ -161,10 +163,9 @@ public class ToAPointsPlugin extends Plugin {
 
 			}
 			//if we didnt just leave the nexus, or loot room add mvp points
-			if(currentRegion != null && currentRegion != ToARegion.TOA_LOBBY && currentRegion != ToARegion.MAIN_AREA && currentRegion != ToARegion.CHEST_ROOM
-			   && config.mvpAssumption())
+			if( config.mvpAssumption())
 			{
-				totalPoints = totalPoints + 300;
+				mvpAssumption(currentRegion, newRegion);
 			}
 
 			currentRegion = newRegion;
@@ -181,6 +182,79 @@ public class ToAPointsPlugin extends Plugin {
 			}
 		}
 		currentRegion = newRegion;
+	}
+
+	public void mvpAssumption(ToARegion leftRegion, ToARegion enteredRegion)
+	{
+		//We left a puzzle room and entered the boss room, add mvp points for the puzzle
+		if(leftRegion != null)
+		{
+			switch (leftRegion)
+			{
+				case PUZZLE_MONKEY:
+				{
+					if(enteredRegion == BOSS_BABA)
+					{
+						totalPoints = totalPoints + 300;
+					}
+				}
+				case PUZZLE_CRONDIS:
+				{
+					if(enteredRegion == BOSS_ZEBAK)
+					{
+						totalPoints = totalPoints + 300;
+					}
+				}
+				case PUZZLE_SCABARAS:
+				{
+					if(enteredRegion == BOSS_KEPHRI)
+					{
+						totalPoints = totalPoints + 300;
+					}
+				}
+				case PUZZLE_HET:
+				{
+					if(enteredRegion == BOSS_AKKHA)
+					{
+						totalPoints = totalPoints + 300;
+					}
+				}
+				//wardens don't drop an item so assumption is needed.
+				case BOSS_WARDEN_FINAL:
+				{
+					if(enteredRegion == CHEST_ROOM)
+					{
+						totalPoints = totalPoints + 300;
+					}
+				}
+			}
+		}
+	}
+
+	@Subscribe
+	public void onItemSpawned(ItemSpawned itemSpawned)
+	{
+
+		TileItem item = itemSpawned.getItem();
+
+		List<Player> teamMembers = client.getPlayers();
+
+		if(item.getId() == 27221 && currentRegion == BOSS_BABA)
+		{
+			totalPoints = totalPoints + (300 * teamMembers.size());
+		}
+		else if (item.getId() == 27223 && currentRegion == BOSS_AKKHA)
+		{
+			totalPoints = totalPoints + (300 * teamMembers.size());
+		}
+		else if (item.getId() == 27219 && currentRegion == BOSS_ZEBAK)
+		{
+			totalPoints = totalPoints + (300 * teamMembers.size());
+		}
+		else if (item.getId() == 27214 && currentRegion == BOSS_KEPHRI)
+		{
+			totalPoints = totalPoints + (300 * teamMembers.size());
+		}
 	}
 
 	@Subscribe
