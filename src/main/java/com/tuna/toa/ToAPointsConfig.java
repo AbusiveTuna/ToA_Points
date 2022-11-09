@@ -40,7 +40,7 @@ public interface ToAPointsConfig extends Config
 		return true;
 	}
 	
-		@ConfigItem(
+	@ConfigItem(
 			keyName = "roomPoints",
 			name = "Display current room points",
 			description = "For the fixed andys",
@@ -49,6 +49,28 @@ public interface ToAPointsConfig extends Config
 	default boolean roomPoints()
 	{
 		return true;
+	}
+	
+	@ConfigItem(
+			keyName = "itemChance",
+			name = "Display an overlay that shows your exact chance for each item",
+			description = "For those that are obsessive about a certain item",
+			position = 5
+	)
+	default boolean itemChance()
+	{
+		return true;
+	}
+	
+	@ConfigItem(
+			keyName = "alwaysShowItemChance",
+			name = "Always display an overlay that shows your exact chance for each item",
+			description = "For those that are obsessive about a certain item",
+			position = 6
+	)
+	default boolean alwaysShowItemChance()
+	{
+		return false;
 	}
 
 }
