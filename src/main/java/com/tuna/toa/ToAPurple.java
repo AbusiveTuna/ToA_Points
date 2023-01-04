@@ -111,6 +111,18 @@ public class ToAPurple
             purplesMap.put(invo, ppsList);
           }
         
+//            if(purplesMap.containsKey(invo + "Time")){ // map already has this invocation level
+//             List <double> timeList = purplesMap.get(invo + "Time");
+//             timeList.add(timeInSeconds);
+//             purplesMap.put(invo,timeList);
+//           }
+//           else{
+//             List <double> timeList = new ArrayList<double>();
+//             timeList.add(timeInSeconds);
+//             purplesMap.put(invo+"Time", timeList);
+//           }
+        
+        
       }
     }
         
