@@ -23,6 +23,10 @@ public class ToAPointsOverlay extends OverlayPanel
     private ToAPointsConfig config;
 
     private double uniqueChance;
+    
+    public double getUniqueChance(){
+        return uniqueChance;
+    }
 
     @Inject
     private ToAPointsOverlay(Client client,
