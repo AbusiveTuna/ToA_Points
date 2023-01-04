@@ -1,3 +1,5 @@
+package com.tuna.toa;
+
 public class ToARaid
 {
   String invocationLevel;

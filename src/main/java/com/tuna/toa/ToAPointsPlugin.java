@@ -401,4 +401,11 @@ public class ToAPointsPlugin extends Plugin {
 	}
 
 
+	public String getTimeCompleted() {
+		return "";
+	}
+
+	public int getPartySize() {
+		return partySize;
+	}
 }
