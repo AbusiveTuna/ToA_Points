@@ -162,6 +162,10 @@ public class ToAPointsPlugin extends Plugin {
 				}
 
 			}
+			
+			if(newRegion == CHEST_ROOM){
+				//call new save raid stuff
+			}
 			//if we didnt just leave the nexus, or loot room add mvp points
 			if( config.mvpAssumption())
 			{
