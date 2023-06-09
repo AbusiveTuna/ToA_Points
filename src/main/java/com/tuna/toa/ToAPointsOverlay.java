@@ -23,6 +23,7 @@ public class ToAPointsOverlay extends OverlayPanel
     private ToAPointsConfig config;
 
     private double uniqueChance;
+    private double petChance;
 
     @Inject
     private ToAPointsOverlay(Client client,
@@ -67,6 +68,7 @@ public class ToAPointsOverlay extends OverlayPanel
             if (totalPoints < 1500)
             {
                 uniqueChance = 0;
+                petChance = 0;
             }
             int invocationLevel = ToAPointsPlugin.getInvocationLevel();
 
