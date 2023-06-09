@@ -10,8 +10,8 @@ public interface ToAPointsConfig extends Config
 
 	@ConfigItem(
 			keyName = "mvpAssumption",
-			name = "MvP Points Assumption",
-			description = "currently we don't calculate MVP, so this adds 300 points (solo mvp) per completed room.",
+			name = "Puzzle MvP Points Assumption",
+			description = "Puzzles don't calculate MVPs, so this estimates it.",
 			position = 1
 	)
 	default boolean mvpAssumption()
@@ -52,25 +52,15 @@ public interface ToAPointsConfig extends Config
 	}
 	
 	@ConfigItem(
-			keyName = "itemChance",
-			name = "Display an overlay that shows your exact chance for each item",
-			description = "For those that are obsessive about a certain item",
-			position = 5
+		keyName = "petChance",
+		name = "Display chance for pet",
+		description = "Displays percent chance to get pet",
+		position = 5
 	)
-	default boolean itemChance()
+	default boolean petChance()
 	{
 		return true;
 	}
 	
-	@ConfigItem(
-			keyName = "alwaysShowItemChance",
-			name = "Always display an overlay that shows your exact chance for each item",
-			description = "For those that are obsessive about a certain item",
-			position = 6
-	)
-	default boolean alwaysShowItemChance()
-	{
-		return false;
-	}
 
 }
