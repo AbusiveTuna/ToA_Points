@@ -99,13 +99,23 @@ public class ToAPointsOverlay extends OverlayPanel
                 }
 
                     int perOnePercentChance = 10500 - invocationMod;
+                    int petOnePercentChance = 350000 - (700 * invocationMod);
                     totalPoints = totalPoints + roomPoints;
                     uniqueChance = totalPoints/perOnePercentChance;
+                    petChance = totalPoints/petOnePercentChance;
 
                     panelComponent.getChildren().add(LineComponent.builder()
                         .left("Unique:")
                         .right(String.valueOf( Math.round(uniqueChance * 100.0) / 100.0 ) + "%")
                         .build());
+                        
+                    if(config.petChance())
+                    {
+                        panelComponent.getChildren().add(LineComponent.builder()
+                            .left("Pet Chance:"
+                            .right(String.valueOf( Math.round(petChance * 100.0) / 100.0 ) + "%")
+                            .build());
+                    }
             }
         }
 
