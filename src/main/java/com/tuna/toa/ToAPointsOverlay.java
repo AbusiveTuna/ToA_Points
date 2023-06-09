@@ -112,7 +112,7 @@ public class ToAPointsOverlay extends OverlayPanel
                     if(config.petChance())
                     {
                         panelComponent.getChildren().add(LineComponent.builder()
-                            .left("Pet Chance:"
+                            .left("Pet Chance:")
                             .right(String.valueOf( Math.round(petChance * 100.0) / 100.0 ) + "%")
                             .build());
                     }
