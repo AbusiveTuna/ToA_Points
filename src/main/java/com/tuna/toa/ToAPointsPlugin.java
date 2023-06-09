@@ -262,6 +262,8 @@ public class ToAPointsPlugin extends Plugin {
 	{
 		if (actorDeath.getActor() == client.getLocalPlayer())
 		{
+			totalPoints = totalPoints + roomPoints;
+			roomPoints = 0; 
 			double pointLoss = totalPoints * 20;
 			pointLoss = pointLoss/100;
 
