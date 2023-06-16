@@ -77,6 +77,7 @@ public class ToAPointsOverlay extends OverlayPanel
                 invocationLevel = 550;
             }
             int invocationMod = 0;
+            int petInvocationMod = 0;
 
             if(invocationLevel < 150)
             {
@@ -94,14 +95,16 @@ public class ToAPointsOverlay extends OverlayPanel
                     invocOver = invocOver / 3;
                     int expertInvocationLevel = 400 + invocOver;
                     invocationMod = expertInvocationLevel * 20;
+                    petInvocationMod = expertInvocationLevel * 700;
                 }
                 else
                 {
                     invocationMod = invocationLevel * 20;
+                    petInvocationMod = invocationLevel * 700;
                 }
 
                     int perOnePercentChance = 10500 - invocationMod;
-                    int petOnePercentChance = 350000 - (700 * invocationMod);
+                    double petOnePercentChance = 350000 - petInvocationMod;
                     totalPoints = totalPoints + roomPoints;
                     uniqueChance = totalPoints/perOnePercentChance;
                     petChance = totalPoints/petOnePercentChance;
