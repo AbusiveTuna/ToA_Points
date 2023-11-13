@@ -108,6 +108,12 @@ public class ToAPointsPlugin extends Plugin {
 			//p2 warden and palm are 2.0 modifier
 			averageHitSplat = averageHitSplat * 2;
 			roomPoints = roomPoints + averageHitSplat;
+
+			//because points are split between members, we lower the point cap
+			//in the crondis puzzle. Mostly to prevent misleading/fake boosting.
+			if(hitsplat.getHitsplatType() == 11 && roomPoints >= 10000){
+				roomPoints = 10000;
+			}
 		}
 		else if (!hitsplat.isMine() || target == client.getLocalPlayer())
 		{
