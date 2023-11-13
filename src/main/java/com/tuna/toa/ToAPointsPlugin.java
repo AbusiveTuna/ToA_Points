@@ -8,6 +8,8 @@ import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.*;
 import net.runelite.api.events.GameTick;
+import net.runelite.api.widgets.ComponentID;
+import net.runelite.api.widgets.InterfaceID;
 import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetID;
 import net.runelite.client.callback.ClientThread;
@@ -138,7 +140,7 @@ public class ToAPointsPlugin extends Plugin {
 			inRaid = true;
 			overlayManager.add(overlay);
 
-			Widget invoWidget = client.getWidget(WidgetID.TOA_RAID_GROUP_ID, 42);
+			Widget invoWidget = client.getWidget(31522858);
 
 			if(invoWidget != null) {
 				String invoLevel = invoWidget.getText();
