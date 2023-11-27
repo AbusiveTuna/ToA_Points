@@ -242,6 +242,8 @@ public class ToAPointsPlugin extends Plugin {
 
 		TileItem item = itemSpawned.getItem();
 
+		List<Player> teamMembers = client.getPlayers();
+
 		if(item.getId() == 27221 && currentRegion == BOSS_BABA)
 		{
 			totalPoints = totalPoints + (300 * teamMembers.size());
