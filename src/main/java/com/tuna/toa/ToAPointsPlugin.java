@@ -242,8 +242,6 @@ public class ToAPointsPlugin extends Plugin {
 
 		TileItem item = itemSpawned.getItem();
 
-		List<Player> teamMembers = client.getPlayers();
-
 		if(item.getId() == 27221 && currentRegion == BOSS_BABA)
 		{
 			totalPoints = totalPoints + (300 * teamMembers.size());
@@ -267,8 +265,14 @@ public class ToAPointsPlugin extends Plugin {
 	{
 		if (actorDeath.getActor() == client.getLocalPlayer())
 		{
-			totalPoints = totalPoints + roomPoints;
-			roomPoints = 0; 
+
+			List<Player> teamMembers = client.getPlayers();
+			
+			if(teamMembers.size() == 1) //dying in a solo means no chance of room completion
+			{
+				roomPoints = 0; 
+			}
+			
 			double pointLoss = totalPoints * 20;
 			pointLoss = pointLoss/100;
 
