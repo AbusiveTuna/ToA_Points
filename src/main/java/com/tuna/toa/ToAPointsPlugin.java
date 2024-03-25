@@ -110,8 +110,12 @@ public class ToAPointsPlugin extends Plugin {
 
 			//because points are split between members, we lower the point cap
 			//in the crondis puzzle. Mostly to prevent misleading/fake boosting.
-			if(hitsplat.getHitsplatType() == 11 && roomPoints >= 10000){
+			//In solos, we just go with the point cap given to us from the blog.
+			if(hitsplat.getHitsplatType() == 11 && roomPoints >= 10000 && teamMembers.size() != 1){
 				roomPoints = 10000;
+			}
+			else if(teamMembers.size() == 1 && hitsplat.getHitsplatType() == 11 && roomPoints >= 20000) {
+				roomPoints = 20000;
 			}
 		}
 		else if (!hitsplat.isMine() || target == client.getLocalPlayer())
